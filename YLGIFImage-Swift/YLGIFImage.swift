@@ -11,13 +11,19 @@ import imageIO
 import MobileCoreServices
 
 class YLGIFImage : UIImage {
+    
+    @lazy var readFrameQueue:dispatch_queue_t = dispatch_queue_create("com.ronnie.gifreadframe", DISPATCH_QUEUE_SERIAL)
+    
     var _scale:CGFloat = 1.0
     var _cgImgSource:CGImageSource? = nil
     var totalDuration: NSTimeInterval = 0.0;
     var frameDurations = NSTimeInterval[]()
     var loopCount: UInt = 1
-    var frameImages:UIImage[] = UIImage[]()
+    var frameImages:AnyObject[] = AnyObject[]()
     
+    class var prefetchNum: UInt {
+        return 10
+    }
 //    convenience init(named name: String!) {
 //        let path = NSBundle.mainBundle().pathForResource(name, ofType: nil)
 //        let data = NSData(contentsOfURL:NSURL.URLWithString(path))
@@ -59,13 +65,41 @@ class YLGIFImage : UIImage {
             
             //println("dura = \(frameDuration)")
             
-            // get frame
-            let cgimage = CGImageSourceCreateImageAtIndex(cgImageSource, i, nil).takeRetainedValue();
-            var image:UIImage = UIImage(CGImage: cgimage)
-            self.frameImages.append(image)
-            //println("\(i): frame = \(image)")
+            if i < YLGIFImage.prefetchNum {
+                // get frame
+                let cgimage = CGImageSourceCreateImageAtIndex(cgImageSource, i, nil).takeRetainedValue();
+                var image:UIImage = UIImage(CGImage: cgimage)
+                self.frameImages.append(image)
+                //println("\(i): frame = \(image)")
+            } else {
+                self.frameImages.append(NSNull())
+            }
         }
         println("\(self.frameImages.count)")
+    }
+    
+    func getFrame(index: UInt) -> UIImage? {
+        if Int(index) >= self.frameImages.count {
+            return nil
+        }
+        var image:UIImage? = self.frameImages[Int(index)] as? UIImage
+        if self.frameImages.count > Int(YLGIFImage.prefetchNum) {
+            if index != 0 {
+                self.frameImages[Int(index)] = NSNull()
+            }
+            
+            for i in index+1...index+YLGIFImage.prefetchNum {
+                let idx = Int(i)%self.frameImages.count
+                if self.frameImages[idx] is NSNull {
+                    dispatch_async(self.readFrameQueue){
+                        let cgImg = CGImageSourceCreateImageAtIndex(self._cgImgSource, UInt(idx), nil).takeRetainedValue()
+                        self.frameImages[idx] = UIImage(CGImage: cgImg)
+                    }
+                }
+            }
+        }
+        
+        return image
     }
     
     class func isCGImageSourceContainAnimatedGIF(cgImageSource: CGImageSource!) -> Bool {

@@ -56,8 +56,11 @@ class YLImageView : UIImageView {
             
             if newValue is YLGIFImage {
                 self.animatedImage = newValue as? YLGIFImage;
-                super.image = self.animatedImage!.frameImages[0]
-                self.currentFrame = super.image
+                let Img = self.animatedImage!.getFrame(0)
+                if Img {
+                    super.image = Img
+                    self.currentFrame = super.image
+                }
                 self.startAnimating()
             } else {
                 super.image = newValue
@@ -65,6 +68,19 @@ class YLImageView : UIImageView {
             }
             self.layer.setNeedsDisplay()
         }
+    }
+    
+    override var highlighted: Bool {
+    get{
+        return super.highlighted
+    }
+    set {
+        if self.animatedImage {
+            return
+        } else {
+            return super.highlighted = newValue
+        }
+    }
     }
     
     override func isAnimating() -> Bool {
@@ -112,9 +128,11 @@ class YLImageView : UIImageView {
                 if Int(self.currentFrameIndex) >= self.animatedImage!.frameImages.count {
                     self.currentFrameIndex = 0
                 }
-                self.currentFrame = self.animatedImage!.frameImages[Int(self.currentFrameIndex)]
-                let img = self.currentFrame!
-                println("display:\(self.currentFrameIndex) with \(self.currentFrame)")
+                
+                let Img = self.animatedImage!.getFrame(self.currentFrameIndex)
+                if Img {
+                    self.currentFrame = Img
+                }
                 self.layer.setNeedsDisplay()
             }
         }
