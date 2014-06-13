@@ -11,12 +11,19 @@ import UIKit
 class ViewController: UIViewController {
     
     @IBOutlet var imageView: UIImageView
+    @IBOutlet var button: UIButton
                             
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         let path = NSBundle.mainBundle().URLForResource("iwatch", withExtension: "gif").absoluteString
         imageView.image = YLGIFImage(contentsOfFile: path)
+        
+        if imageView.isAnimating() {
+            self.button.setTitle("Pause", forState: UIControlState.Normal)
+        } else {
+            self.button.setTitle("Play", forState: UIControlState.Normal)
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -24,6 +31,20 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
+    @IBAction func clicked(button:UIButton) {
+        
+        if imageView.isAnimating() {
+            imageView.stopAnimating()
+        } else {
+            imageView.startAnimating()
+        }
+        
+        if imageView.isAnimating() {
+            self.button.setTitle("Pause", forState: UIControlState.Normal)
+        } else {
+            self.button.setTitle("Play", forState: UIControlState.Normal)
+        }
+    }
 
 }
 

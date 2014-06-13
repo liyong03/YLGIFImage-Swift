@@ -21,21 +21,25 @@ class YLImageView : UIImageView {
     init(coder aDecoder: NSCoder!)  {
         super.init(coder: aDecoder)
         self.displayLink.addToRunLoop(NSRunLoop.mainRunLoop(), forMode: NSRunLoopCommonModes)
+        self.displayLink.paused = true
     }
     
     init(frame: CGRect) {
         super.init(frame: frame)
         self.displayLink.addToRunLoop(NSRunLoop.mainRunLoop(), forMode: NSRunLoopCommonModes)
+        self.displayLink.paused = true
     }
     
     init(image: UIImage!)  {
         super.init(image: image)
         self.displayLink.addToRunLoop(NSRunLoop.mainRunLoop(), forMode: NSRunLoopCommonModes)
+        self.displayLink.paused = true
     }
     
     init(image: UIImage!, highlightedImage: UIImage!)  {
         super.init(image: image, highlightedImage: highlightedImage)
         self.displayLink.addToRunLoop(NSRunLoop.mainRunLoop(), forMode: NSRunLoopCommonModes)
+        self.displayLink.paused = true
     }
     
     override var image: UIImage! {
@@ -84,7 +88,11 @@ class YLImageView : UIImageView {
     }
     
     override func isAnimating() -> Bool {
-        return super.isAnimating() && !self.displayLink.paused
+        if self.animatedImage {
+            return !self.displayLink.paused
+        } else {
+            return super.isAnimating()
+        }
     }
     
     override func startAnimating() {

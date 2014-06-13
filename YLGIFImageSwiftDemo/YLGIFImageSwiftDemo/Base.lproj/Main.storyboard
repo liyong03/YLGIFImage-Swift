@@ -23,15 +23,31 @@
                                     <constraint firstAttribute="width" constant="320" id="oZd-ke-xrS"/>
                                 </constraints>
                             </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uy2-uB-gnu">
+                                <rect key="frame" x="215" y="367" width="50" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="Vnn-SY-mvE"/>
+                                    <constraint firstAttribute="width" constant="50" id="ryA-In-YEC"/>
+                                </constraints>
+                                <state key="normal" title="Play">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="clicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="hHi-1D-iND"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstAttribute="centerX" secondItem="uy2-uB-gnu" secondAttribute="centerX" id="1hZ-xX-jSP"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="uy2-uB-gnu" secondAttribute="bottom" constant="83" id="EQx-Oe-92Y"/>
                             <constraint firstAttribute="centerX" secondItem="Jp3-rc-fXD" secondAttribute="centerX" id="M7I-6T-Sg2"/>
                             <constraint firstItem="Jp3-rc-fXD" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="36" id="zGR-MJ-udW"/>
                         </constraints>
                         <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                     </view>
                     <connections>
+                        <outlet property="button" destination="uy2-uB-gnu" id="sS4-iy-Evg"/>
                         <outlet property="imageView" destination="Jp3-rc-fXD" id="ENn-Yc-gK3"/>
                     </connections>
                 </viewController>
