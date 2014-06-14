@@ -15,6 +15,9 @@ class ViewController: UIViewController {
                             
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        YLGIFImage.setPrefetchNum(2)
+        
         // Do any additional setup after loading the view, typically from a nib.
         let path = NSBundle.mainBundle().URLForResource("iwatch", withExtension: "gif").absoluteString
         imageView.image = YLGIFImage(contentsOfFile: path)

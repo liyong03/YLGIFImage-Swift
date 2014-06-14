@@ -21,8 +21,16 @@ class YLGIFImage : UIImage {
     var loopCount: UInt = 1
     var frameImages:AnyObject[] = AnyObject[]()
     
+    struct YLGIFGlobalSetting {
+        static var prefetchNumber:UInt = 10
+    }
+    
     class var prefetchNum: UInt {
-        return 10
+        return YLGIFGlobalSetting.prefetchNumber;
+    }
+    
+    class func setPrefetchNum(number:UInt) {
+        YLGIFGlobalSetting.prefetchNumber = number;
     }
 //    convenience init(named name: String!) {
 //        let path = NSBundle.mainBundle().pathForResource(name, ofType: nil)
