@@ -15,6 +15,7 @@ class ViewController: UIViewController {
                             
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationItem.title = "YLGIFImage Swift"
         
         YLGIFImage.setPrefetchNum(2)
         
