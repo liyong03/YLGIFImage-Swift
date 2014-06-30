@@ -20,7 +20,7 @@ class ViewController: UIViewController {
         YLGIFImage.setPrefetchNum(2)
         
         // Do any additional setup after loading the view, typically from a nib.
-        let path = NSBundle.mainBundle().URLForResource("iwatch", withExtension: "gif").absoluteString
+        let path = NSBundle.mainBundle().URLForResource("joy", withExtension: "gif").absoluteString
         imageView.image = YLGIFImage(contentsOfFile: path)
         
         if imageView.isAnimating() {

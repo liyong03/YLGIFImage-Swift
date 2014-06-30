@@ -9,6 +9,9 @@
 import UIKit
 import QuartzCore
 
+var _time:CFTimeInterval = 0.0
+var _frameTime:CFTimeInterval = 0.0
+
 class YLImageView : UIImageView {
     
     @lazy var displayLink:CADisplayLink = CADisplayLink(target: self, selector: "changeKeyFrame:")
@@ -112,9 +115,9 @@ class YLImageView : UIImageView {
     }
     
     override func displayLayer(layer: CALayer!) {
-        if animatedImage {
-            if self.currentFrame {
-                layer.contents = self.currentFrame!.CGImage
+        if let animatedImg = self.animatedImage {
+            if let frame = self.currentFrame {
+                layer.contents = frame.CGImage
             }
         } else {
             return
@@ -132,13 +135,13 @@ class YLImageView : UIImageView {
             self.accumulator += fmin(1.0, dpLink.duration)
             while self.accumulator >= self.animatedImage!.frameDurations[Int(self.currentFrameIndex)] {
                 self.accumulator -= self.animatedImage!.frameDurations[Int(self.currentFrameIndex)]
+                _frameTime += self.animatedImage!.frameDurations[Int(self.currentFrameIndex)]
                 self.currentFrameIndex++
                 if Int(self.currentFrameIndex) >= self.animatedImage!.frameImages.count {
                     self.currentFrameIndex = 0
                 }
                 
-                let Img = self.animatedImage!.getFrame(self.currentFrameIndex)
-                if Img {
+                if let Img = self.animatedImage!.getFrame(self.currentFrameIndex) {
                     self.currentFrame = Img
                 }
                 self.layer.setNeedsDisplay()
