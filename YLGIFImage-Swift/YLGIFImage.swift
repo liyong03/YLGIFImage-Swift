@@ -16,7 +16,7 @@ class YLGIFImage : UIImage {
     
     var _scale:CGFloat = 1.0
     var _cgImgSource:CGImageSource? = nil
-    var totalDuration: NSTimeInterval = 0.0;
+    var totalDuration: NSTimeInterval = 0.0
     var frameDurations = NSTimeInterval[]()
     var loopCount: UInt = 1
     var frameImages:AnyObject[] = AnyObject[]()
@@ -26,11 +26,11 @@ class YLGIFImage : UIImage {
     }
     
     class var prefetchNum: UInt {
-        return YLGIFGlobalSetting.prefetchNumber;
+        return YLGIFGlobalSetting.prefetchNumber
     }
     
     class func setPrefetchNum(number:UInt) {
-        YLGIFGlobalSetting.prefetchNumber = number;
+        YLGIFGlobalSetting.prefetchNumber = number
     }
 //    convenience init(named name: String!) {
 //        let path = NSBundle.mainBundle().pathForResource(name, ofType: nil)
@@ -67,15 +67,15 @@ class YLGIFImage : UIImage {
         let numOfFrames = CGImageSourceGetCount(cgImageSource)
         for i in 0..numOfFrames {
             // get frame duration
-            let frameDuration = YLGIFImage.getCGImageSourceGifFrameDelay(cgImageSource, index: i);
+            let frameDuration = YLGIFImage.getCGImageSourceGifFrameDelay(cgImageSource, index: i)
             self.frameDurations.append(frameDuration)
-            self.totalDuration += frameDuration;
+            self.totalDuration += frameDuration
             
             //println("dura = \(frameDuration)")
             
             if i < YLGIFImage.prefetchNum {
                 // get frame
-                let cgimage = CGImageSourceCreateImageAtIndex(cgImageSource, i, nil).takeRetainedValue();
+                let cgimage = CGImageSourceCreateImageAtIndex(cgImageSource, i, nil).takeRetainedValue()
                 var image:UIImage = UIImage(CGImage: cgimage)
                 self.frameImages.append(image)
                 //println("\(i): frame = \(image)")

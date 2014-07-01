@@ -62,7 +62,7 @@ class YLImageView : UIImageView {
             self.accumulator = 0.0
             
             if newValue is YLGIFImage {
-                self.animatedImage = newValue as? YLGIFImage;
+                self.animatedImage = newValue as? YLGIFImage
                 let Img = self.animatedImage!.getFrame(0)
                 if Img {
                     super.image = Img
