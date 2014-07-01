@@ -17,7 +17,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         self.navigationItem.title = "YLGIFImage Swift"
         
-        YLGIFImage.setPrefetchNum(2)
+        YLGIFImage.setPrefetchNum(5)
         
         // Do any additional setup after loading the view, typically from a nib.
         let path = NSBundle.mainBundle().URLForResource("joy", withExtension: "gif").absoluteString

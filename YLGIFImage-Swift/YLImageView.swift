@@ -9,9 +9,6 @@
 import UIKit
 import QuartzCore
 
-var _time:CFTimeInterval = 0.0
-var _frameTime:CFTimeInterval = 0.0
-
 class YLImageView : UIImageView {
     
     @lazy var displayLink:CADisplayLink = CADisplayLink(target: self, selector: "changeKeyFrame:")
@@ -125,27 +122,26 @@ class YLImageView : UIImageView {
     }
     
     func changeKeyFrame(dpLink: CADisplayLink!) -> Void {
-        if !self.animatedImage {
-            self.stopAnimating()
-            return
-        }
-        if Int(self.currentFrameIndex) >= self.animatedImage!.frameImages.count {
-            return
-        } else {
-            self.accumulator += fmin(1.0, dpLink.duration)
-            while self.accumulator >= self.animatedImage!.frameDurations[Int(self.currentFrameIndex)] {
-                self.accumulator -= self.animatedImage!.frameDurations[Int(self.currentFrameIndex)]
-                _frameTime += self.animatedImage!.frameDurations[Int(self.currentFrameIndex)]
-                self.currentFrameIndex++
-                if Int(self.currentFrameIndex) >= self.animatedImage!.frameImages.count {
-                    self.currentFrameIndex = 0
+        if let animatedImg = self.animatedImage {
+            if Int(self.currentFrameIndex) < animatedImg.frameImages.count {
+                self.accumulator += fmin(10.0, dpLink.duration)
+                //println("interval = \(dpLink.duration)")
+                while self.accumulator >= animatedImg.frameDurations[Int(self.currentFrameIndex)] {
+                    self.accumulator -= animatedImg.frameDurations[Int(self.currentFrameIndex)]
+                    self.currentFrameIndex++
+                    if Int(self.currentFrameIndex) >= animatedImg.frameImages.count {
+                        self.currentFrameIndex = 0
+                    }
+                    
+                    let Img = animatedImg.getFrame(self.currentFrameIndex)
+                    if Img {
+                        self.currentFrame = Img
+                    }
+                    self.layer.setNeedsDisplay()
                 }
-                
-                if let Img = self.animatedImage!.getFrame(self.currentFrameIndex) {
-                    self.currentFrame = Img
-                }
-                self.layer.setNeedsDisplay()
             }
+        } else {
+            self.stopAnimating()
         }
     }
 }
