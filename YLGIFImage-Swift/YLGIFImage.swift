@@ -17,7 +17,7 @@ class YLGIFImage : UIImage {
     var _scale:CGFloat = 1.0
     var _cgImgSource:CGImageSource? = nil
     var totalDuration: NSTimeInterval = 0.0
-    var frameDurations = NSTimeInterval[]()
+    var frameDurations = AnyObject[]()
     var loopCount: UInt = 1
     var frameImages:AnyObject[] = AnyObject[]()
     
@@ -68,7 +68,7 @@ class YLGIFImage : UIImage {
         for i in 0..numOfFrames {
             // get frame duration
             let frameDuration = YLGIFImage.getCGImageSourceGifFrameDelay(cgImageSource, index: i)
-            self.frameDurations.append(frameDuration)
+            self.frameDurations.append(NSNumber(double: frameDuration))
             self.totalDuration += frameDuration
             
             //println("dura = \(frameDuration)")
