@@ -133,14 +133,13 @@ class YLImageView : UIImageView {
                     if Int(self.currentFrameIndex) >= animatedImg.frameImages.count {
                         self.currentFrameIndex = 0
                     }
+                    if let Img = animatedImg.getFrame(UInt(self.currentFrameIndex)) {
+                        self.currentFrame = Img
+                    }
+                    self.layer.setNeedsDisplay()
                     frameDura = animatedImg.frameDurations[self.currentFrameIndex] as NSNumber
                 }
                 
-                
-                if let Img = animatedImg.getFrame(UInt(self.currentFrameIndex)) {
-                    self.currentFrame = Img
-                }
-                self.layer.setNeedsDisplay()
             }
         } else {
             self.stopAnimating()
