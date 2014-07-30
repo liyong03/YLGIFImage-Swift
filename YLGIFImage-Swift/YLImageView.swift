@@ -11,12 +11,12 @@ import QuartzCore
 
 class YLImageView : UIImageView {
     
-    lazy var displayLink:CADisplayLink = CADisplayLink(target: self, selector: "changeKeyFrame:")
-    var accumulator: NSTimeInterval = 0.0
-    var currentFrameIndex: Int = 0
-    var currentFrame: UIImage? = nil
-    var loopCountdown: Int = Int.max
-    var animatedImage: YLGIFImage? = nil
+    private lazy var displayLink:CADisplayLink = CADisplayLink(target: self, selector: "changeKeyFrame:")
+    private var accumulator: NSTimeInterval = 0.0
+    private var currentFrameIndex: Int = 0
+    private var currentFrame: UIImage? = nil
+    private var loopCountdown: Int = Int.max
+    private var animatedImage: YLGIFImage? = nil
     
     init(coder aDecoder: NSCoder!)  {
         super.init(coder: aDecoder)

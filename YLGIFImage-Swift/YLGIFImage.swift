@@ -12,10 +12,10 @@ import MobileCoreServices
 
 class YLGIFImage : UIImage {
     
-    lazy var readFrameQueue:dispatch_queue_t = dispatch_queue_create("com.ronnie.gifreadframe", DISPATCH_QUEUE_SERIAL)
+    private lazy var readFrameQueue:dispatch_queue_t = dispatch_queue_create("com.ronnie.gifreadframe", DISPATCH_QUEUE_SERIAL)
     
-    var _scale:CGFloat = 1.0
-    var _cgImgSource:CGImageSource? = nil
+    private var _scale:CGFloat = 1.0
+    private var _cgImgSource:CGImageSource? = nil
     var totalDuration: NSTimeInterval = 0.0
     var frameDurations = [AnyObject]()
     var loopCount: UInt = 1
@@ -57,7 +57,7 @@ class YLGIFImage : UIImage {
         }
     }
     
-    func createSelf(cgImageSource: CGImageSource!, scale: CGFloat) -> Void {
+    private func createSelf(cgImageSource: CGImageSource!, scale: CGFloat) -> Void {
         _cgImgSource = cgImageSource
         let imageProperties:NSDictionary = CGImageSourceCopyProperties(_cgImgSource, nil).takeRetainedValue() as NSDictionary
         var gifProperties: NSDictionary? = imageProperties[kCGImagePropertyGIFDictionary] as? NSDictionary
@@ -83,7 +83,7 @@ class YLGIFImage : UIImage {
                 self.frameImages.append(NSNull())
             }
         }
-        println("\(self.frameImages.count)")
+        //println("\(self.frameImages.count)")
     }
     
     func getFrame(index: UInt) -> UIImage? {
@@ -110,13 +110,13 @@ class YLGIFImage : UIImage {
         return image
     }
     
-    class func isCGImageSourceContainAnimatedGIF(cgImageSource: CGImageSource!) -> Bool {
+    private class func isCGImageSourceContainAnimatedGIF(cgImageSource: CGImageSource!) -> Bool {
         let isGIF:Boolean = UTTypeConformsTo(CGImageSourceGetType(cgImageSource).takeUnretainedValue(), kUTTypeGIF)
         let imgCount = CGImageSourceGetCount(cgImageSource)
         return isGIF != 0 && imgCount > 1
     }
     
-    class func getCGImageSourceGifFrameDelay(imageSource: CGImageSourceRef, index: UInt) -> NSTimeInterval {
+    private class func getCGImageSourceGifFrameDelay(imageSource: CGImageSourceRef, index: UInt) -> NSTimeInterval {
         var delay = 0.0
         let imgProperties = CGImageSourceCopyPropertiesAtIndex(imageSource, index, nil).takeRetainedValue() as NSDictionary
         let gifProperties:NSDictionary? = imgProperties[kCGImagePropertyGIFDictionary] as? NSDictionary
