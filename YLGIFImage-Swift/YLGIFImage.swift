@@ -7,12 +7,12 @@
 //
 
 import UIKit
-import imageIO
+import ImageIO
 import MobileCoreServices
 
 class YLGIFImage : UIImage {
     
-    @lazy var readFrameQueue:dispatch_queue_t = dispatch_queue_create("com.ronnie.gifreadframe", DISPATCH_QUEUE_SERIAL)
+    lazy var readFrameQueue:dispatch_queue_t = dispatch_queue_create("com.ronnie.gifreadframe", DISPATCH_QUEUE_SERIAL)
     
     var _scale:CGFloat = 1.0
     var _cgImgSource:CGImageSource? = nil

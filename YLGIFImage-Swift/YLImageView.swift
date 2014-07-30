@@ -11,7 +11,7 @@ import QuartzCore
 
 class YLImageView : UIImageView {
     
-    @lazy var displayLink:CADisplayLink = CADisplayLink(target: self, selector: "changeKeyFrame:")
+    lazy var displayLink:CADisplayLink = CADisplayLink(target: self, selector: "changeKeyFrame:")
     var accumulator: NSTimeInterval = 0.0
     var currentFrameIndex: Int = 0
     var currentFrame: UIImage? = nil
