@@ -17,26 +17,26 @@ class YLImageView : UIImageView {
     private var currentFrame: UIImage? = nil
     private var loopCountdown: Int = Int.max
     private var animatedImage: YLGIFImage? = nil
-    
-    init(coder aDecoder: NSCoder!)  {
+  
+    required init(coder aDecoder: NSCoder)  {
         super.init(coder: aDecoder)
         self.displayLink.addToRunLoop(NSRunLoop.mainRunLoop(), forMode: NSRunLoopCommonModes)
         self.displayLink.paused = true
     }
     
-    init(frame: CGRect) {
+    override init(frame: CGRect) {
         super.init(frame: frame)
         self.displayLink.addToRunLoop(NSRunLoop.mainRunLoop(), forMode: NSRunLoopCommonModes)
         self.displayLink.paused = true
     }
     
-    init(image: UIImage!)  {
+    override init(image: UIImage!)  {
         super.init(image: image)
         self.displayLink.addToRunLoop(NSRunLoop.mainRunLoop(), forMode: NSRunLoopCommonModes)
         self.displayLink.paused = true
     }
     
-    init(image: UIImage!, highlightedImage: UIImage!)  {
+    override init(image: UIImage!, highlightedImage: UIImage!)  {
         super.init(image: image, highlightedImage: highlightedImage)
         self.displayLink.addToRunLoop(NSRunLoop.mainRunLoop(), forMode: NSRunLoopCommonModes)
         self.displayLink.paused = true
@@ -44,7 +44,7 @@ class YLImageView : UIImageView {
     
     override var image: UIImage! {
         get {
-            if self.animatedImage {
+            if (self.animatedImage != nil) {
                 return self.animatedImage
             } else {
                 return super.image
@@ -60,8 +60,7 @@ class YLImageView : UIImageView {
             
             if newValue is YLGIFImage {
                 self.animatedImage = newValue as? YLGIFImage
-                let Img = self.animatedImage!.getFrame(0)
-                if Img {
+                if let Img = self.animatedImage!.getFrame(0) {
                     super.image = Img
                     self.currentFrame = super.image
                 }
@@ -79,7 +78,7 @@ class YLImageView : UIImageView {
         return super.highlighted
     }
     set {
-        if self.animatedImage {
+        if (self.animatedImage != nil) {
             return
         } else {
             return super.highlighted = newValue
@@ -88,7 +87,7 @@ class YLImageView : UIImageView {
     }
     
     override func isAnimating() -> Bool {
-        if self.animatedImage {
+        if (self.animatedImage != nil) {
             return !self.displayLink.paused
         } else {
             return super.isAnimating()
@@ -96,7 +95,7 @@ class YLImageView : UIImageView {
     }
     
     override func startAnimating() {
-        if self.animatedImage {
+        if (self.animatedImage != nil) {
             self.displayLink.paused = false
         } else {
             super.startAnimating()
@@ -104,7 +103,7 @@ class YLImageView : UIImageView {
     }
     
     override func stopAnimating()  {
-        if self.animatedImage {
+        if (self.animatedImage != nil) {
             self.displayLink.paused = true
         } else {
             super.stopAnimating()

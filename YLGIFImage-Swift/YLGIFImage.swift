@@ -38,17 +38,17 @@ class YLGIFImage : UIImage {
 //        self.init(data: data)
 //    }
     
-    convenience init(contentsOfFile path: String!) {
+    convenience override init(contentsOfFile path: String!) {
         let data = NSData(contentsOfURL: NSURL.URLWithString(path))
         self.init(data: data)
     }
     
-    convenience init(data: NSData!)  {
+    convenience override init(data: NSData!)  {
         self.init(data: data, scale: 1.0)
     }
     
-    init(data: NSData!, scale: CGFloat) {
-        var cgImgSource = CGImageSourceCreateWithData(data, nil).takeRetainedValue()
+    override init(data: NSData!, scale: CGFloat) {
+        var cgImgSource = CGImageSourceCreateWithData(data, nil)
         if YLGIFImage.isCGImageSourceContainAnimatedGIF(cgImgSource) {
             super.init()
             createSelf(cgImgSource, scale: scale)
@@ -56,10 +56,14 @@ class YLGIFImage : UIImage {
             super.init(data: data, scale: scale)
         }
     }
+
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     private func createSelf(cgImageSource: CGImageSource!, scale: CGFloat) -> Void {
         _cgImgSource = cgImageSource
-        let imageProperties:NSDictionary = CGImageSourceCopyProperties(_cgImgSource, nil).takeRetainedValue() as NSDictionary
+        let imageProperties:NSDictionary = CGImageSourceCopyProperties(_cgImgSource, nil) as NSDictionary
         var gifProperties: NSDictionary? = imageProperties[kCGImagePropertyGIFDictionary] as? NSDictionary
         if let property = gifProperties {
             self.loopCount = property[kCGImagePropertyGIFLoopCount] as UInt
@@ -75,7 +79,7 @@ class YLGIFImage : UIImage {
             
             if i < YLGIFImage.prefetchNum {
                 // get frame
-                let cgimage = CGImageSourceCreateImageAtIndex(cgImageSource, i, nil).takeRetainedValue()
+                let cgimage = CGImageSourceCreateImageAtIndex(cgImageSource, i, nil)
                 var image:UIImage = UIImage(CGImage: cgimage)
                 self.frameImages.append(image)
                 //println("\(i): frame = \(image)")
@@ -100,7 +104,7 @@ class YLGIFImage : UIImage {
                 let idx = Int(i)%self.frameImages.count
                 if self.frameImages[idx] is NSNull {
                     dispatch_async(self.readFrameQueue){
-                        let cgImg = CGImageSourceCreateImageAtIndex(self._cgImgSource, UInt(idx), nil).takeRetainedValue()
+                        let cgImg = CGImageSourceCreateImageAtIndex(self._cgImgSource, UInt(idx), nil)
                         self.frameImages[idx] = UIImage(CGImage: cgImg)
                     }
                 }
@@ -111,14 +115,14 @@ class YLGIFImage : UIImage {
     }
     
     private class func isCGImageSourceContainAnimatedGIF(cgImageSource: CGImageSource!) -> Bool {
-        let isGIF:Boolean = UTTypeConformsTo(CGImageSourceGetType(cgImageSource).takeUnretainedValue(), kUTTypeGIF)
+        let isGIF:Boolean = UTTypeConformsTo(CGImageSourceGetType(cgImageSource), kUTTypeGIF)
         let imgCount = CGImageSourceGetCount(cgImageSource)
         return isGIF != 0 && imgCount > 1
     }
     
     private class func getCGImageSourceGifFrameDelay(imageSource: CGImageSourceRef, index: UInt) -> NSTimeInterval {
         var delay = 0.0
-        let imgProperties = CGImageSourceCopyPropertiesAtIndex(imageSource, index, nil).takeRetainedValue() as NSDictionary
+        let imgProperties = CGImageSourceCopyPropertiesAtIndex(imageSource, index, nil) as NSDictionary
         let gifProperties:NSDictionary? = imgProperties[kCGImagePropertyGIFDictionary] as? NSDictionary
         if let property = gifProperties {
             delay = property[kCGImagePropertyGIFUnclampedDelayTime] as Double
