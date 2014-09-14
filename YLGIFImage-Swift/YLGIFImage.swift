@@ -38,16 +38,16 @@ class YLGIFImage : UIImage {
 //        self.init(data: data)
 //    }
     
-    convenience override init(contentsOfFile path: String!) {
+    convenience override init(contentsOfFile path: String) {
         let data = NSData(contentsOfURL: NSURL.URLWithString(path))
         self.init(data: data)
     }
     
-    convenience override init(data: NSData!)  {
+    convenience override init(data: NSData)  {
         self.init(data: data, scale: 1.0)
     }
     
-    override init(data: NSData!, scale: CGFloat) {
+    override init(data: NSData, scale: CGFloat) {
         var cgImgSource = CGImageSourceCreateWithData(data, nil)
         if YLGIFImage.isCGImageSourceContainAnimatedGIF(cgImgSource) {
             super.init()
