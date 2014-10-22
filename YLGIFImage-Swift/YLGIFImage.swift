@@ -39,8 +39,8 @@ class YLGIFImage : UIImage {
 //    }
     
     convenience override init(contentsOfFile path: String) {
-        let data = NSData(contentsOfURL: NSURL.URLWithString(path))
-        self.init(data: data)
+        let data = NSData(contentsOfURL: NSURL(string: path)!)
+        self.init(data: data!)
     }
     
     convenience override init(data: NSData)  {
@@ -64,9 +64,9 @@ class YLGIFImage : UIImage {
     private func createSelf(cgImageSource: CGImageSource!, scale: CGFloat) -> Void {
         _cgImgSource = cgImageSource
         let imageProperties:NSDictionary = CGImageSourceCopyProperties(_cgImgSource, nil) as NSDictionary
-        var gifProperties: NSDictionary? = imageProperties[kCGImagePropertyGIFDictionary] as? NSDictionary
+        var gifProperties: NSDictionary? = imageProperties[kCGImagePropertyGIFDictionary as String] as? NSDictionary
         if let property = gifProperties {
-            self.loopCount = property[kCGImagePropertyGIFLoopCount] as UInt
+            self.loopCount = property[kCGImagePropertyGIFLoopCount as String] as UInt
         }
         let numOfFrames = CGImageSourceGetCount(cgImageSource)
         for i in 0..<numOfFrames {
@@ -80,7 +80,7 @@ class YLGIFImage : UIImage {
             if i < YLGIFImage.prefetchNum {
                 // get frame
                 let cgimage = CGImageSourceCreateImageAtIndex(cgImageSource, i, nil)
-                var image:UIImage = UIImage(CGImage: cgimage)
+                var image:UIImage = UIImage(CGImage: cgimage)!
                 self.frameImages.append(image)
                 //println("\(i): frame = \(image)")
             } else {
@@ -105,7 +105,7 @@ class YLGIFImage : UIImage {
                 if self.frameImages[idx] is NSNull {
                     dispatch_async(self.readFrameQueue){
                         let cgImg = CGImageSourceCreateImageAtIndex(self._cgImgSource, UInt(idx), nil)
-                        self.frameImages[idx] = UIImage(CGImage: cgImg)
+                        self.frameImages[idx] = UIImage(CGImage: cgImg)!
                     }
                 }
             }
@@ -123,11 +123,11 @@ class YLGIFImage : UIImage {
     private class func getCGImageSourceGifFrameDelay(imageSource: CGImageSourceRef, index: UInt) -> NSTimeInterval {
         var delay = 0.0
         let imgProperties = CGImageSourceCopyPropertiesAtIndex(imageSource, index, nil) as NSDictionary
-        let gifProperties:NSDictionary? = imgProperties[kCGImagePropertyGIFDictionary] as? NSDictionary
+        let gifProperties:NSDictionary? = imgProperties[kCGImagePropertyGIFDictionary as String] as? NSDictionary
         if let property = gifProperties {
-            delay = property[kCGImagePropertyGIFUnclampedDelayTime] as Double
+            delay = property[kCGImagePropertyGIFUnclampedDelayTime as String] as Double
             if delay <= 0 {
-                delay = property[kCGImagePropertyGIFDelayTime] as Double
+                delay = property[kCGImagePropertyGIFDelayTime as String] as Double
             }
         }
         return delay
