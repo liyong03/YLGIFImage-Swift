@@ -124,7 +124,7 @@ class YLImageView : UIImageView {
         if let animatedImg = self.animatedImage {
             if self.currentFrameIndex < animatedImg.frameImages.count {
                 self.accumulator += fmin(1.0, dpLink.duration)
-                var frameDura = animatedImg.frameDurations[self.currentFrameIndex] as NSNumber
+                var frameDura = animatedImg.frameDurations[self.currentFrameIndex] as! NSNumber
                 while self.accumulator >= frameDura.doubleValue
                 {
                     self.accumulator = self.accumulator - frameDura.doubleValue//animatedImg.frameDurations[self.currentFrameIndex]
@@ -136,7 +136,7 @@ class YLImageView : UIImageView {
                         self.currentFrame = Img
                     }
                     self.layer.setNeedsDisplay()
-                    frameDura = animatedImg.frameDurations[self.currentFrameIndex] as NSNumber
+                    frameDura = animatedImg.frameDurations[self.currentFrameIndex] as! NSNumber
                 }
                 
             }
