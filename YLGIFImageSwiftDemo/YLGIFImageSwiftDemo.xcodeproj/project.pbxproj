@@ -17,6 +17,7 @@
 		4E8046E019447FF7007EFB50 /* YLImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8046DE19447FF7007EFB50 /* YLImageView.swift */; };
 		4E8046E2194480E9007EFB50 /* iwatch.gif in Resources */ = {isa = PBXBuildFile; fileRef = 4E8046E1194480E9007EFB50 /* iwatch.gif */; };
 		4E8046E3194480E9007EFB50 /* iwatch.gif in Resources */ = {isa = PBXBuildFile; fileRef = 4E8046E1194480E9007EFB50 /* iwatch.gif */; };
+		DFAC28131AFB3A5A002A21F9 /* Launch Screen.xib in Resources */ = {isa = PBXBuildFile; fileRef = DFAC28121AFB3A5A002A21F9 /* Launch Screen.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,6 +44,7 @@
 		4E8046DD19447FF7007EFB50 /* YLGIFImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = YLGIFImage.swift; path = "../YLGIFImage-Swift/YLGIFImage.swift"; sourceTree = "<group>"; };
 		4E8046DE19447FF7007EFB50 /* YLImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = YLImageView.swift; path = "../YLGIFImage-Swift/YLImageView.swift"; sourceTree = "<group>"; };
 		4E8046E1194480E9007EFB50 /* iwatch.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = iwatch.gif; sourceTree = "<group>"; };
+		DFAC28121AFB3A5A002A21F9 /* Launch Screen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "Launch Screen.xib"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,6 +94,7 @@
 				4E5096741961B64000D37D33 /* joy.gif */,
 				4E8046C619447FB6007EFB50 /* Images.xcassets */,
 				4E8046BD19447FB6007EFB50 /* Supporting Files */,
+				DFAC28121AFB3A5A002A21F9 /* Launch Screen.xib */,
 			);
 			path = YLGIFImageSwiftDemo;
 			sourceTree = "<group>";
@@ -214,6 +217,7 @@
 				4E5096751961B64000D37D33 /* joy.gif in Resources */,
 				4E8046E2194480E9007EFB50 /* iwatch.gif in Resources */,
 				4E8046C719447FB6007EFB50 /* Images.xcassets in Resources */,
+				DFAC28131AFB3A5A002A21F9 /* Launch Screen.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -352,7 +356,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = YLGIFImageSwiftDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
@@ -365,7 +368,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = YLGIFImageSwiftDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
