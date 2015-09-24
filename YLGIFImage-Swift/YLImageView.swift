@@ -18,7 +18,7 @@ class YLImageView : UIImageView {
     private var loopCountdown: Int = Int.max
     private var animatedImage: YLGIFImage? = nil
   
-    required init(coder aDecoder: NSCoder)  {
+    required init?(coder aDecoder: NSCoder)  {
         super.init(coder: aDecoder)
         self.displayLink.addToRunLoop(NSRunLoop.mainRunLoop(), forMode: NSRunLoopCommonModes)
         self.displayLink.paused = true
@@ -30,13 +30,13 @@ class YLImageView : UIImageView {
         self.displayLink.paused = true
     }
     
-    override init(image: UIImage!)  {
+    override init(image: UIImage?)  {
         super.init(image: image)
         self.displayLink.addToRunLoop(NSRunLoop.mainRunLoop(), forMode: NSRunLoopCommonModes)
         self.displayLink.paused = true
     }
     
-    override init(image: UIImage!, highlightedImage: UIImage!)  {
+    override init(image: UIImage?, highlightedImage: UIImage!)  {
         super.init(image: image, highlightedImage: highlightedImage)
         self.displayLink.addToRunLoop(NSRunLoop.mainRunLoop(), forMode: NSRunLoopCommonModes)
         self.displayLink.paused = true
@@ -110,8 +110,8 @@ class YLImageView : UIImageView {
         }
     }
     
-    override func displayLayer(layer: CALayer!) {
-        if let animatedImg = self.animatedImage {
+    override func displayLayer(layer: CALayer) {
+        if (self.animatedImage != nil) {
             if let frame = self.currentFrame {
                 layer.contents = frame.CGImage
             }
