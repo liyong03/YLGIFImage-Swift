@@ -20,13 +20,13 @@ class ViewController: UIViewController {
         YLGIFImage.setPrefetchNum(5)
         
         // Do any additional setup after loading the view, typically from a nib.
-        let path = NSBundle.mainBundle().URLForResource("iwatch", withExtension: "gif")?.absoluteString as String!
-        imageView.image = YLGIFImage(contentsOfFile: path)
+        let path = Bundle.main.url(forResource: "iwatch", withExtension: "gif")?.absoluteString as String!
+        imageView.image = YLGIFImage(contentsOfFile: path!)
         
-        if imageView.isAnimating() {
-            self.button.setTitle("Pause", forState: UIControlState.Normal)
+        if imageView.isAnimating {
+            self.button.setTitle("Pause", for: UIControlState())
         } else {
-            self.button.setTitle("Play", forState: UIControlState.Normal)
+            self.button.setTitle("Play", for: UIControlState())
         }
     }
 
@@ -35,18 +35,18 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    @IBAction func clicked(button:UIButton) {
+    @IBAction func clicked(_ button:UIButton) {
         
-        if imageView.isAnimating() {
+        if imageView.isAnimating {
             imageView.stopAnimating()
         } else {
             imageView.startAnimating()
         }
         
-        if imageView.isAnimating() {
-            self.button.setTitle("Pause", forState: UIControlState.Normal)
+        if imageView.isAnimating {
+            self.button.setTitle("Pause", for: UIControlState())
         } else {
-            self.button.setTitle("Play", forState: UIControlState.Normal)
+            self.button.setTitle("Play", for: UIControlState())
         }
     }
 
