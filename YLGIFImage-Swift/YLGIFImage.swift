@@ -12,13 +12,13 @@ import MobileCoreServices
 
 class YLGIFImage : UIImage {
     
-    private class func isCGImageSourceContainAnimatedGIF(cgImageSource: CGImageSource!) -> Bool {
+    fileprivate class func isCGImageSourceContainAnimatedGIF(_ cgImageSource: CGImageSource!) -> Bool {
         let isGIF = UTTypeConformsTo(CGImageSourceGetType(cgImageSource)!, kUTTypeGIF)
         let imgCount = CGImageSourceGetCount(cgImageSource)
         return isGIF && imgCount > 1
     }
     
-    private class func getCGImageSourceGifFrameDelay(imageSource: CGImageSourceRef, index: UInt) -> NSTimeInterval {
+    fileprivate class func getCGImageSourceGifFrameDelay(_ imageSource: CGImageSource, index: UInt) -> TimeInterval {
         var delay = 0.0
         let imgProperties:NSDictionary = CGImageSourceCopyPropertiesAtIndex(imageSource, Int(index), nil)!
         let gifProperties:NSDictionary? = imgProperties[kCGImagePropertyGIFDictionary as String] as? NSDictionary
@@ -31,7 +31,7 @@ class YLGIFImage : UIImage {
         return delay
     }
     
-    private func createSelf(cgImageSource: CGImageSource!, scale: CGFloat) -> Void {
+    fileprivate func createSelf(_ cgImageSource: CGImageSource!, scale: CGFloat) -> Void {
         _cgImgSource = cgImageSource
         let imageProperties:NSDictionary = CGImageSourceCopyProperties(_cgImgSource!, nil)!
         let gifProperties: NSDictionary? = imageProperties[kCGImagePropertyGIFDictionary as String] as? NSDictionary
@@ -42,7 +42,7 @@ class YLGIFImage : UIImage {
         for i in 0..<numOfFrames {
             // get frame duration
             let frameDuration = YLGIFImage.getCGImageSourceGifFrameDelay(cgImageSource, index: UInt(i))
-            self.frameDurations.append(NSNumber(double: frameDuration))
+            self.frameDurations.append(NSNumber(value: frameDuration as Double))
             self.totalDuration += frameDuration
             
             //Log("dura = \(frameDuration)")
@@ -50,7 +50,7 @@ class YLGIFImage : UIImage {
             if i < Int(YLGIFImage.prefetchNum) {
                 // get frame
                 let cgimage = CGImageSourceCreateImageAtIndex(cgImageSource, i, nil)
-                let image: UIImage = UIImage(CGImage: cgimage!)
+                let image: UIImage = UIImage(cgImage: cgimage!)
                 self.frameImages.append(image)
                 //Log("\(i): frame = \(image)")
             } else {
@@ -60,11 +60,11 @@ class YLGIFImage : UIImage {
         //Log("\(self.frameImages.count)")
     }
 
-    private lazy var readFrameQueue:dispatch_queue_t = dispatch_queue_create("com.ronnie.gifreadframe", DISPATCH_QUEUE_SERIAL)
+    fileprivate lazy var readFrameQueue:DispatchQueue = DispatchQueue(label: "com.ronnie.gifreadframe", attributes: [])
 
-    private var _scale:CGFloat = 1.0
-    private var _cgImgSource:CGImageSource? = nil
-    var totalDuration: NSTimeInterval = 0.0
+    fileprivate var _scale:CGFloat = 1.0
+    fileprivate var _cgImgSource:CGImageSource? = nil
+    var totalDuration: TimeInterval = 0.0
     var frameDurations = [AnyObject]()
     var loopCount: UInt = 1
     var frameImages:[AnyObject] = [AnyObject]()
@@ -77,29 +77,29 @@ class YLGIFImage : UIImage {
         return YLGIFGlobalSetting.prefetchNumber
     }
 
-    class func setPrefetchNum(number:UInt) {
+    class func setPrefetchNum(_ number:UInt) {
         YLGIFGlobalSetting.prefetchNumber = number
     }
 
     convenience init?(named name: String!) {
-        guard let path = NSBundle.mainBundle().pathForResource(name, ofType: nil)
+        guard let path = Bundle.main.path(forResource: name, ofType: nil)
             else { return nil }
-        guard let data = NSData(contentsOfURL:NSURL.fileURLWithPath(path))
+        guard let data = try? Data(contentsOf: URL(fileURLWithPath: path))
             else { return nil }
         self.init(data: data)
     }
 
     convenience override init?(contentsOfFile path: String) {
-        let data = NSData(contentsOfURL: NSURL(string: path)!)
+        let data = try? Data(contentsOf: URL(string: path)!)
         self.init(data: data!)
     }
 
-    convenience override init?(data: NSData)  {
+    convenience override init?(data: Data)  {
         self.init(data: data, scale: 1.0)
     }
 
-    override init?(data: NSData, scale: CGFloat) {
-        let cgImgSource = CGImageSourceCreateWithData(data, nil)
+    override init?(data: Data, scale: CGFloat) {
+        let cgImgSource = CGImageSourceCreateWithData(data as CFData, nil)
         if YLGIFImage.isCGImageSourceContainAnimatedGIF(cgImgSource) {
             super.init()
             createSelf(cgImgSource, scale: scale)
@@ -116,7 +116,11 @@ class YLGIFImage : UIImage {
         fatalError("init(imageLiteral name:) has not been implemented")
     }
 
-    func getFrame(index: UInt) -> UIImage? {
+    required convenience init(imageLiteralResourceName name: String) {
+        fatalError("init(imageLiteralResourceName:) has not been implemented")
+    }
+
+    func getFrame(_ index: UInt) -> UIImage? {
         if Int(index) >= self.frameImages.count {
             return nil
         }
@@ -129,9 +133,9 @@ class YLGIFImage : UIImage {
             for i in index+1...index+YLGIFImage.prefetchNum {
                 let idx = Int(i)%self.frameImages.count
                 if self.frameImages[idx] is NSNull {
-                    dispatch_async(self.readFrameQueue){
+                    self.readFrameQueue.async{
                         let cgImg = CGImageSourceCreateImageAtIndex(self._cgImgSource!, idx, nil)
-                        self.frameImages[idx] = UIImage(CGImage: cgImg!)
+                        self.frameImages[idx] = UIImage(cgImage: cgImg!)
                     }
                 }
             }
